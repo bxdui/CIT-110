@@ -2,6 +2,7 @@
 
 namespace BigLetter
 {
+    // Print a large "H" composed of H's
     class BigLetter
     {
 
