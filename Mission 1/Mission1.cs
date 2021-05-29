@@ -23,6 +23,8 @@ class Conversation
         // Format UI
         // ------------------------------
         Console.CursorVisible = false;
+        Console.WindowWidth = 600;
+        Console.WindowHeight = 300;
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.Clear();
@@ -34,6 +36,7 @@ class Conversation
         Console.WriteLine("The Conversation");
         Console.WriteLine("\nPress any key to continue");
         Console.ReadKey();
+        Console.Beep();
 
         // ------------------------------
         // Request user's name
