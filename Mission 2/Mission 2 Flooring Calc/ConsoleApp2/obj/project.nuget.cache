@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "E/AEwbBssHptgAQcVLMtydB4tDr8w31iSSj5o2v3z2Y8S+/2o1BGEDeP/7K0w7MOv0LPgSh5goVzi6fwjXmxwg==",
+  "dgSpecHash": "YDrdO5jvRCm5wGzAKoRBz6OVgjvfVSfCtrNA3PUoL5tx9BR0jIxQd+rUnNOCE9gq9JH0nCL6Wb+7WSdg2JI/zg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Steven\\source\\repos\\ConsoleApp2\\ConsoleApp2\\ConsoleApp2.csproj",
+  "projectFilePath": "C:\\Users\\Steven\\Desktop\\NMC\\Summer 2021\\CIT 110\\Mission 2\\Mission 2 Flooring Calc\\ConsoleApp2\\ConsoleApp2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Steven\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.15\\microsoft.netcore.app.host.win-x64.3.1.15.nupkg.sha512"
   ],

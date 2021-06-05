@@ -4,7 +4,7 @@
 // Description: Calculates the cost of flooring two floors given the user-input width and length
 // Author: Steven Winkler
 // Date Created: 6/1/2021
-// Last Modified:
+// Last Modified: 6/1/2021
 // ************************************
 
 using System;
@@ -62,7 +62,7 @@ class FlooringCalc
         string verifyFloorRoom = Console.ReadLine();
 
         // Ensure valid input
-        while (verifyFloorRoom.ToUpper() != "Y" & verifyFloorRoom.ToUpper() != "N")
+        while (verifyFloorRoom.ToUpper() != "Y" && verifyFloorRoom.ToUpper() != "N")
         {
             Console.WriteLine("Please enter Y or N");
             verifyFloorRoom = Console.ReadLine();
@@ -169,6 +169,22 @@ class FlooringCalc
             + "\nFlooring:".PadRight(10) + $"{infoArr[2].ToString("C")}".PadLeft(10) + $"{infoArr[5].ToString("C")}".PadLeft(20)
             + "\nTotal:".PadRight(10) + $"{(infoArr[0] * infoArr[1] * infoArr[2]).ToString("C")}".PadLeft(10) + $"{(infoArr[3] * infoArr[4] * infoArr[5]).ToString("C")}".PadLeft(20)
             );
+
+        switch (infoArr[0])
+        {
+            case 1:
+                Console.WriteLine("Flooring small rooms may incur a greater labor cost");
+                break;
+
+            case 0:
+                Console.WriteLine("Flooring is free, there's no room to floor!");
+                break;
+
+            default:
+                Console.WriteLine("\n\nCalculation complete");
+                break;
+        }
+
         Console.WriteLine("\n\nPress any key to exit");
         Console.ReadKey();
     }
