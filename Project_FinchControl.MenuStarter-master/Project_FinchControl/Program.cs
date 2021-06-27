@@ -4,12 +4,28 @@
 // Description: An application that controls the Finch Robot's LED lights, speakers, and motors
 // Author: Steven Winkler
 // Date Created: 6/5/2021
-// Last Modified: 6/16/2021
+// Last Modified: 6/26/2021
 // ************************************
 
 using System;
 using System.Collections.Generic;
 using FinchAPI;
+
+// Create enum for the User Programming feature
+
+// Declare enum Command for Finch robot commands used in User Programming. NONE omitted for display later, failsafe not needed due to validation
+public enum Command
+{
+    MOVEFORWARD,
+    MOVEBACKWARD,
+    STOPMOTORS,
+    WAIT,
+    TURNRIGHT,
+    TURNLEFT,
+    LEDON,
+    LEDOFF,
+    GETTEMPERATURE
+}
 
 class Program
 {
@@ -32,7 +48,7 @@ class Program
 
     static void DisplayContinuePrompt()
     {
-        Console.WriteLine("\n\t\tPress Enter to continue.");
+        Console.Write("\n\t\tPress Enter to continue.");
         Console.ReadLine();
     }
 
@@ -725,7 +741,7 @@ class Program
 
             // Select right value
             case "Right":
-                currentSensorValue = finchRobot.getRightLightSensor();
+                currentSensorValue = sensorValues[1];
                 break;
 
             // Select average value of both sensors
@@ -906,12 +922,321 @@ class Program
 
     static void UserProgrammingDisplayMenuScreen(Finch finchRobot)
     {
-        DisplayHeader("Text from programming display");
-        Console.WriteLine("\nThis function is under development");
+        // Declare quitMenu to loop through menu choices
+        bool quitMenu = false;
+        // Declare commandParameters as tuple to store user-input Finch parameters
+        (double commandDuration, int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+        // Set default values for every item in commandParameters
+        commandParameters.commandDuration = 0;
+        commandParameters.motorSpeed = 0;
+        commandParameters.ledBrightness = 0;
+        commandParameters.waitSeconds = 0;
+        // Create commands as a list of tuple to store user-input command and default command duration
+        var commands = new List<Tuple<Command, double>>();
+
+        DisplayHeader("User Programming Menu");
+
+        // Loop through menu and call methods according to user input
+        do
+        {
+            Console.Clear();
+            DisplayHeader("\n\t\tAlarm System Menu");
+
+            // Display menu to user
+            Console.WriteLine(
+                  "\n\ta) Set Command Parameters"
+                + "\n\tb) Add Commands"
+                + "\n\tc) View Selected Commands"
+                + "\n\td) Execute Commands"
+                + "\n\te) Main Menu"
+                );
+
+            // Receive user input
+            Console.Write("\n\t\tEnter option: ");
+            string menuIn = Console.ReadLine();
+
+            // Validate and call functions according to menu selection
+            switch (menuIn.ToLower())
+            {
+                case "a":
+                    commandParameters = UserProgrammingGetCommandParameters();
+                    break;
+
+                case "b":
+                    UserProgrammingGetFinchCommands(commandParameters, commands);
+                    break;
+
+                case "c":
+                    UserProgrammingDisplayCommands(commands);
+                    break;
+
+                case "d":
+                    UserProgrammingExecuteCommands(finchRobot, commandParameters, commands);
+                    break;
+
+                case "e":
+                    quitMenu = true;
+                    break;
+
+                default:
+                    Console.WriteLine("\tPlease enter a valid input");
+                    break;
+            }
+
+        } while (!quitMenu);
+    }
+
+    static int ValidateInputInt(string inputMessage, int lowerLimit, int upperLimit)
+    {
+        // Display data input message
+        Console.Clear();
+        Console.Write($"\n\t{inputMessage}");
+
+        // Declare dataOut to store validated user input
+        int dataOut = 0;
+        // Declare dataOutVerify to loop through user input until properly validated
+        bool dataOutVerify = false;
+
+        while (!dataOutVerify)
+        {
+           while (!Int32.TryParse(Console.ReadLine(), out dataOut))
+           {
+               DisplayHeader(inputMessage);
+               Console.Write($"\n\tPlease enter a whole number from {lowerLimit} to {upperLimit}: ");
+           }
+
+           if (dataOut < lowerLimit || dataOut > upperLimit)
+           {
+               DisplayHeader($"Number must be greater than {lowerLimit} and less than {upperLimit}.");
+               DisplayContinuePrompt();
+           }
+           else
+           {
+               // Once dataOut is an int within the set parameters, break the loop
+               dataOutVerify = true;
+           }
+        }
+
+        return dataOut;
+    }
+
+    static double ValidateInputDouble(string inputMessage, int lowerLimit, int upperLimit)
+    {
+        // Display data input message
+        Console.Clear();
+        Console.Write($"\n\t{inputMessage}");
+
+        // Declare dataOut to store validated user input
+        double dataOut = 0;
+        bool dataOutVerify = false;
+
+        while (!dataOutVerify)
+        {
+            while (!Double.TryParse(Console.ReadLine(), out dataOut))
+            {
+                DisplayHeader(inputMessage);
+                Console.Write($"\n\tPlease enter a whole number from {lowerLimit} to {upperLimit}: ");
+            }
+
+            if (dataOut < lowerLimit || dataOut > upperLimit)
+            {
+                DisplayHeader($"Number must be greater than {lowerLimit} and less than {upperLimit}.");
+                DisplayContinuePrompt();
+            }
+            else
+            {
+                // Once dataOut is a double within the set parameters, break the loop
+                dataOutVerify = true;
+            }
+        }
+
+        return dataOut;
+    }
+
+    static (double commandDuration, int motorSpeed, int ledBrightness, double waitSeconds) UserProgrammingGetCommandParameters()
+    {
+        // Declare tuple commandParameters within scope of this function and set default values
+        (double commandDuration, int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+        commandParameters.commandDuration = 0;
+        commandParameters.motorSpeed = 0;
+        commandParameters.ledBrightness = 0;
+        commandParameters.waitSeconds = 0;
+
+        DisplayHeader("Set Command Parameters");
+
+        // Validate input using ValidateInputDouble() and ValidateInputInt(), passing the relevant message and limit parameters
+        commandParameters.commandDuration = ValidateInputDouble("Enter the default command duration(1-255) ", 1, 255);
+        commandParameters.motorSpeed = ValidateInputInt("Enter Motor Speed (1-255) ", 1, 255);
+        commandParameters.ledBrightness = ValidateInputInt("Enter LED Brightness (1-255) ", 1, 255);
+        commandParameters.waitSeconds = ValidateInputDouble("Enter delay time in seconds (1-255) ", 1, 255);
+
+        // Return values to user
+        Console.WriteLine($"\n\tDefault command duration: {commandParameters.commandDuration}"
+                        + $"\n\tMotor speed: {commandParameters.motorSpeed}"
+                        + $"\n\tLED brightness: {commandParameters.ledBrightness}"
+                        + $"\n\tDelay time (seconds): {commandParameters.waitSeconds}");
+
+        DisplayContinuePrompt();
+
+        return commandParameters;
+    }
+
+    static void UserProgrammingGetFinchCommands((double commandDuration, int motorSpeed, int ledBrightness, double waitSeconds) commandParameters, List<Tuple<Command, double>> commands)
+    {
+        DisplayHeader("Enter Finch Commands");
+
+        Console.WriteLine("\n\tThe valid commands are as follows:");
+
+        // Display all items in enum Command
+        foreach (string item in Enum.GetNames(typeof(Command)))
+        {
+            Console.WriteLine(item.ToLower());
+        }
+
+        Console.WriteLine("\n\tPlease enter your commands for the Finch robot in sequential order. Enter 'done' when finished.");
+
+        // Process user-input Finch commands
+
+        // Declare inputCommand to loop until user decides to break
+        bool inputCommand = true;
+
+        while (inputCommand)
+        {
+            // Gather raw user input
+            string commandIn = Console.ReadLine();
+
+            // Validate and act according to user input
+            switch (commandIn)
+            {
+                case "moveforward":
+                    commands.Add(Tuple.Create(Command.MOVEFORWARD, commandParameters.commandDuration));
+                    break;
+
+                case "movebackward":
+                    commands.Add(Tuple.Create(Command.MOVEBACKWARD, commandParameters.commandDuration));
+                    break;
+
+                case "stopmotors":
+                    commands.Add(Tuple.Create(Command.STOPMOTORS, commandParameters.commandDuration));
+                    break;
+
+                case "wait":
+                    commands.Add(Tuple.Create(Command.WAIT, commandParameters.commandDuration));
+                    break;
+
+                case "turnright":
+                    commands.Add(Tuple.Create(Command.TURNRIGHT, commandParameters.commandDuration));
+                    break;
+
+                case "turnleft":
+                    commands.Add(Tuple.Create(Command.TURNLEFT, commandParameters.commandDuration));
+                    break;
+
+                case "ledon":
+                    commands.Add(Tuple.Create(Command.LEDON, commandParameters.commandDuration));
+                    break;
+
+                case "ledoff":
+                    commands.Add(Tuple.Create(Command.LEDOFF, commandParameters.commandDuration));
+                    break;
+
+                case "gettemperature":
+                    commands.Add(Tuple.Create(Command.GETTEMPERATURE, commandParameters.commandDuration));
+                    break;
+
+                case "done":
+                    inputCommand = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Enter a valid Finch method");
+                    break;
+            }
+        }
+        Console.WriteLine("\n\tCommands saved");
+
         DisplayContinuePrompt();
     }
 
-    // The home page of the application. Allows user to select course of action
+    static void UserProgrammingDisplayCommands(List<Tuple<Command, double>> commands)
+    {
+        DisplayHeader("Selected commands:");
+
+        // Display all user-selected commands
+        foreach (Tuple<Command, double> commandTuple in commands)
+        {
+            Console.WriteLine($"\n{commandTuple.Item1}");
+        }
+
+        DisplayContinuePrompt();
+    }
+
+    static void UserProgrammingExecuteCommands(Finch finchRobot, (double commandDuration, int motorSpeed, int ledBrightness, double waitSeconds) commandParameters, List<Tuple<Command, double>> commands)
+    {
+        DisplayHeader("Execute selected commands");
+
+        DisplayContinuePrompt();
+
+        // Loop through all the items in commands. Execute the command for the duration declared by the user
+        // All wait values multiplied x1000 to convert to seconds
+        foreach (Tuple<Command, double> finchCommand in commands)
+        {
+            switch (finchCommand.Item1)
+            {
+                case Command.MOVEFORWARD:
+                    finchRobot.setMotors(commandParameters.motorSpeed, commandParameters.motorSpeed);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.MOVEBACKWARD:
+                    finchRobot.setMotors(-commandParameters.motorSpeed, -commandParameters.motorSpeed);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.STOPMOTORS:
+                    finchRobot.setMotors(0, 0);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.WAIT:
+                    finchRobot.wait((int)commandParameters.waitSeconds * 1000);
+                    continue;
+
+                case Command.TURNRIGHT:
+                    finchRobot.setMotors(commandParameters.motorSpeed, 0);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.TURNLEFT:
+                    finchRobot.setMotors(0, commandParameters.motorSpeed);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.LEDON:
+                    finchRobot.setLED(commandParameters.ledBrightness, commandParameters.ledBrightness, commandParameters.ledBrightness);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.LEDOFF:
+                    finchRobot.setLED(0, 0, 0);
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+
+                case Command.GETTEMPERATURE:
+                    Console.WriteLine($"\n\tTemperature reading: {finchRobot.getTemperature() * 1.8 + 32}");
+                    finchRobot.wait((int)commandParameters.commandDuration * 1000);
+                    continue;
+            }
+        }
+        // Turn off motors and LEDs when execution complete
+
+        finchRobot.setMotors(0, 0);
+        finchRobot.setLED(0, 0, 0);
+
+        Console.WriteLine("\n\tCommand execution complete");
+
+        DisplayContinuePrompt();
+    }
 
     #endregion
 
