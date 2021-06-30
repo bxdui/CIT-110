@@ -4,12 +4,13 @@
 // Description: An application that controls the Finch Robot's LED lights, speakers, and motors
 // Author: Steven Winkler
 // Date Created: 6/5/2021
-// Last Modified: 6/26/2021
+// Last Modified: 6/30/2021
 // ************************************
 
 using System;
 using System.Collections.Generic;
 using FinchAPI;
+using System.IO;
 
 // Create enum for the User Programming feature
 
@@ -1240,12 +1241,112 @@ class Program
 
     #endregion
 
+    #region I/O
+
+    static void LoginMenu()
+    {
+        string dataPathNormal = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\Login.txt";
+        string dataPathCSV = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\LoginCSV.txt";
+        Console.Write("\n\tReturning user? Y or N: ");
+        string verify = Console.ReadLine();
+
+        switch (verify.ToUpper())
+        {
+            case "Y":
+                LoginEntry(dataPathNormal);
+                break;
+
+            case "N":
+                LoginWriteInfo(dataPathNormal, dataPathCSV);
+                LoginEntry(dataPathNormal);
+                break;
+        }
+    }
+
+    static bool LoginVerifyInfo(string userIn, string passIn)
+    {
+        // Declare loginInfoRaw to store CSV values
+        string loginInfoRaw;
+        // Declare loginInfoArr to store username and password saved in the LoginCSV.txt file
+        string[] loginInfoArr;
+
+        // Declare loginInfoRaw as raw reading of LoginCSV.txt
+        loginInfoRaw = File.ReadAllText(@"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\LoginCSV.txt");
+
+        // Add the CSV values to loginInfoArr split at the comma
+        loginInfoArr = loginInfoRaw.Split(',');
+        string username = loginInfoArr[0];
+        string password = loginInfoArr[1];
+
+        // Declare validInfo as a check to ensure that the entered username and password (passed as userIn and passIn respectively) are saved in LoginCSV.txt
+        bool validInfo = (username == userIn) && (password == passIn);
+
+        // Return validInfo to LoginWriteInfo
+        return validInfo;
+    }
+
+    static void LoginWriteInfo(string dataPathNormal, string dataPathCSV)
+    {
+        // Declare loginArr as string[] with length of 2
+        string[] loginArr = new string[2];
+
+        // Prompt user for login info to check
+        Console.Write("\n\tEnter your username: ");
+        string userIn = Console.ReadLine();
+        Console.Write("\n\tEnter your password: ");
+        string passIn = Console.ReadLine();
+
+        // Set loginArr values to userIn and passIn
+        loginArr[0] = userIn;
+        loginArr[1] = passIn;
+
+        // Repeat entered values to user
+        Console.WriteLine($"\n\tEntered info: \n\tUsername: {userIn} \n\tPassword: {passIn}");
+
+        // Write login info to both files
+        File.WriteAllText(dataPathCSV, $"{userIn},{passIn}");
+        File.WriteAllLines(dataPathNormal, loginArr);
+
+        DisplayContinuePrompt();
+    }
+
+    static void LoginEntry(string dataPath)
+    {
+        // Declare userIn as the user-input username
+        string userIn;
+        // Declare passIn as the user-input password
+        string passIn;
+        // Declare validInfo as bool to validate user-input login info
+        bool validInfo;
+
+        do
+        {
+            DisplayHeader("Login");
+
+            // Prompt user for login details
+            Console.Write("\n\tEnter your username: ");
+            userIn = Console.ReadLine();
+            Console.Write("\n\tEnter your password: ");
+            passIn = Console.ReadLine();
+
+            // Call LoginVerifyInfo to validate user-input login details. Will return bool validInfo to break or continue the loop
+            validInfo = LoginVerifyInfo(userIn, passIn);
+        }
+        // Repeat while user-input login info doesn't match the contents of LoginCSV.txt
+        while (!validInfo);
+    }
+
+    #endregion
+
     //----------------------------
     // Entry point
     //----------------------------
 
     static void Main()
     {
+        LoginMenu();
+        DisplayContinuePrompt();
+        Console.Clear();
         Finch finchRobot = new Finch();
         DisplayWelcomeScreen();
         DisplayMenuScreen();
