@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using FinchAPI;
 using System.IO;
+using System.Linq;
 
 // Create enum for the User Programming feature
 
@@ -146,7 +147,7 @@ class Program
     static void DisplayClosingScreen()
     {
         Console.Clear();
-        Console.WriteLine("Thanks for using the Finch Robot application.");
+        Console.WriteLine("\n\tThanks for using the Finch Robot application.");
         DisplayContinuePrompt();
     }
 
@@ -164,7 +165,7 @@ class Program
         // Disconnect robot
         finchRobot.disConnect();
 
-        Console.WriteLine("\tThe Finch Robot has been disconnected");
+        DisplayHeader("The Finch Robot has been disconnected.");
         DisplayContinuePrompt();
         return true;
     }
@@ -1243,8 +1244,6 @@ class Program
 
     #region I/O
 
-    // TODO: Loop through all users and passes in LoginCSV to verify username and password, current verification only looks at the first element. Wouldn't hurt to add invalid login info message
-
     static void LoginMenu()
     {
         string dataPathNormal = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\Login.txt";
@@ -1264,47 +1263,33 @@ class Program
 
                 while (accountLimit > 5 || accountLimit < 1)
                 {
-                    Console.Write("Please enter a positive value less than 5: ");
+                    Console.Write("\n\tPlease enter a positive value less than 5: ");
                     Int32.TryParse(Console.ReadLine(), out accountLimit);
                 }
 
                 LoginWriteInfo(dataPathNormal, dataPathCSV, accountLimit);
                 LoginEntry(dataPathNormal);
                 break;
+
+            default:
+                LoginMenu();
+                break;
         }
-    }
-
-    static bool LoginVerifyInfo(string userIn, string passIn)
-    {
-        // Declare loginInfoRaw to store CSV values
-        string loginInfoRaw;
-        // Declare loginInfoArr to store username and password saved in the LoginCSV.txt file
-        string[] loginInfoArr;
-
-        // Declare loginInfoRaw as raw reading of LoginCSV.txt
-        loginInfoRaw = File.ReadAllText(@"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\LoginCSV.txt");
-
-        // Add the CSV values to loginInfoArr split at the comma
-        loginInfoArr = loginInfoRaw.Split(',');
-        string username = loginInfoArr[0];
-        string password = loginInfoArr[1];
-
-        // Declare validInfo as a check to ensure that the entered username and password (passed as userIn and passIn respectively) are saved in LoginCSV.txt
-        bool validInfo = (username == userIn) && (password == passIn);
-
-        // Return validInfo to LoginWriteInfo
-        return validInfo;
     }
 
     static void LoginWriteInfo(string dataPathNormal, string dataPathCSV, int accountLimit)
     { 
+        // Declare enteredAccounts as int = 0 to loop through user-input credentials
         int enteredAccounts = 0;
 
         while (enteredAccounts < accountLimit)
         {
+            // Declare usernameLst to hold the usernames from the LoginCSV.txt file
             List<string> usernameLst = new List<string>();
+            // Declare loginInfoRaw to hold the information currently saved in the LoginCSV.txt file
             string[] loginInfoRaw = File.ReadAllLines(dataPathCSV);
 
+            // Add every username from the LoginCSV.txt file to usernameLst
             for (int usernameIndex = 0; usernameIndex < loginInfoRaw.Length; usernameIndex++)
             {
                 string loginDetails = loginInfoRaw[usernameIndex];
@@ -1312,15 +1297,19 @@ class Program
                 usernameLst.Add(username);
             }
 
+            // Clear text from last function
             Console.Clear();
 
+            // Declare loginIn to hold user-input username and password
             string[] loginIn = new string[2];
+            // Declare loginInCSV to hold the credentials to write to LoginCSV.txt
             string[] loginInCSV = new string[1];
 
             // Collect username from user
             Console.Write("\n\tEnter your desired username: ");
             string userIn = Console.ReadLine();
 
+            // Ensure the entered username is unique and prompt re-entry if not
             bool containsName = (usernameLst.Contains(userIn));
 
             if (containsName)
@@ -1328,6 +1317,8 @@ class Program
                 Console.WriteLine("\n\tUsername already taken, please enter a new one.");
 
                 DisplayContinuePrompt();
+
+                // Repeat the loop
             }
             else
             {
@@ -1338,43 +1329,21 @@ class Program
 
                 DisplayContinuePrompt();
 
+                // Format loginIn and loginInCSV for their respective writing
                 loginIn[0] = userIn;
                 loginIn[1] = passIn;
                 loginInCSV[0] = $"{userIn}, {passIn}";
 
+                // Write information to Login.txt and LoginCSV.txt
                 File.AppendAllLines(dataPathNormal, loginIn);
                 File.AppendAllLines(dataPathCSV, loginInCSV);
 
+                // Once information has been written, increment enteredAccounts
                 enteredAccounts++;
             }
-
-
-            // Once username is valid, enter password
-            // Enter username and password as a pair (one line)
-
-            // In this case, switch to just CSV file to intrinsically link username and password. This will retain multi-line functionality and streamline
         }
 
-        //// Declare loginArr as string[] with length of 2
-        //string[] loginArr = new string[2];
-
-        //// Prompt user for login info to check
-        //Console.Write("\n\tEnter your username: ");
-        //string userIn = Console.ReadLine();
-        //Console.Write("\n\tEnter your password: ");
-        //string passIn = Console.ReadLine();
-
-        //// Set loginArr values to userIn and passIn
-        //loginArr[0] = userIn;
-        //loginArr[1] = passIn;
-
-        //// Repeat entered values to user
-        //Console.WriteLine($"\n\tEntered info: \n\tUsername: {userIn} \n\tPassword: {passIn}");
-
-        //// Write login info to both files
-        //File.WriteAllText(dataPathCSV, $"{userIn},{passIn}");
-        //File.WriteAllLines(dataPathNormal, loginArr);
-
+        // Repeat number of accounts added by user
         Console.WriteLine($"\n\t{accountLimit} accounts added");
 
         DisplayContinuePrompt();
@@ -1382,11 +1351,7 @@ class Program
 
     static void LoginEntry(string dataPath)
     {
-        // Declare userIn as the user-input username
-        string userIn;
-        // Declare passIn as the user-input password
-        string passIn;
-        // Declare validInfo as bool to validate user-input login info
+        // Declare validInfo for later check
         bool validInfo;
 
         do
@@ -1395,12 +1360,28 @@ class Program
 
             // Prompt user for login details
             Console.Write("\n\tEnter your username: ");
-            userIn = Console.ReadLine();
+            string userIn = Console.ReadLine();
             Console.Write("\n\tEnter your password: ");
-            passIn = Console.ReadLine();
+            string passIn = Console.ReadLine();
 
-            // Call LoginVerifyInfo to validate user-input login details. Will return bool validInfo to break or continue the loop
-            validInfo = LoginVerifyInfo(userIn, passIn);
+            // Declare loginInfoArr to hold all values from LoginCSV.txt
+            string[] loginInfoArr = File.ReadAllLines(@"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\LoginCSV.txt");
+
+            // Declare credentialsIn as formatted user-input credentials
+            string credentialsIn = $"{userIn}, {passIn}";
+
+            // Check to see if credentialsIn is present in LoginCSV.txt
+            if (loginInfoArr.Contains(credentialsIn))
+            {
+                validInfo = true;
+            }
+            else
+            {
+                validInfo = false;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid login information");
+                Console.ResetColor();
+            }
         }
         // Repeat while user-input login info doesn't match the contents of LoginCSV.txt
         while (!validInfo);
