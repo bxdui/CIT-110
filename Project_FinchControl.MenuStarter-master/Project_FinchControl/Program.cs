@@ -1243,6 +1243,8 @@ class Program
 
     #region I/O
 
+    // TODO: Loop through all users and passes in LoginCSV to verify username and password, current verification only looks at the first element. Wouldn't hurt to add invalid login info message
+
     static void LoginMenu()
     {
         string dataPathNormal = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\Login.txt";
@@ -1257,7 +1259,16 @@ class Program
                 break;
 
             case "N":
-                LoginWriteInfo(dataPathNormal, dataPathCSV);
+                Console.Write("\n\tHow many accounts would you like to create? Max limit of 5: ");
+                Int32.TryParse(Console.ReadLine(), out int accountLimit);
+
+                while (accountLimit > 5 || accountLimit < 1)
+                {
+                    Console.Write("Please enter a positive value less than 5: ");
+                    Int32.TryParse(Console.ReadLine(), out accountLimit);
+                }
+
+                LoginWriteInfo(dataPathNormal, dataPathCSV, accountLimit);
                 LoginEntry(dataPathNormal);
                 break;
         }
@@ -1285,27 +1296,86 @@ class Program
         return validInfo;
     }
 
-    static void LoginWriteInfo(string dataPathNormal, string dataPathCSV)
-    {
-        // Declare loginArr as string[] with length of 2
-        string[] loginArr = new string[2];
+    static void LoginWriteInfo(string dataPathNormal, string dataPathCSV, int accountLimit)
+    { 
+        int enteredAccounts = 0;
 
-        // Prompt user for login info to check
-        Console.Write("\n\tEnter your username: ");
-        string userIn = Console.ReadLine();
-        Console.Write("\n\tEnter your password: ");
-        string passIn = Console.ReadLine();
+        while (enteredAccounts < accountLimit)
+        {
+            List<string> usernameLst = new List<string>();
+            string[] loginInfoRaw = File.ReadAllLines(dataPathCSV);
 
-        // Set loginArr values to userIn and passIn
-        loginArr[0] = userIn;
-        loginArr[1] = passIn;
+            for (int usernameIndex = 0; usernameIndex < loginInfoRaw.Length; usernameIndex++)
+            {
+                string loginDetails = loginInfoRaw[usernameIndex];
+                string username = loginDetails.Split(',')[0];
+                usernameLst.Add(username);
+            }
 
-        // Repeat entered values to user
-        Console.WriteLine($"\n\tEntered info: \n\tUsername: {userIn} \n\tPassword: {passIn}");
+            Console.Clear();
 
-        // Write login info to both files
-        File.WriteAllText(dataPathCSV, $"{userIn},{passIn}");
-        File.WriteAllLines(dataPathNormal, loginArr);
+            string[] loginIn = new string[2];
+            string[] loginInCSV = new string[1];
+
+            // Collect username from user
+            Console.Write("\n\tEnter your desired username: ");
+            string userIn = Console.ReadLine();
+
+            bool containsName = (usernameLst.Contains(userIn));
+
+            if (containsName)
+            {
+                Console.WriteLine("\n\tUsername already taken, please enter a new one.");
+
+                DisplayContinuePrompt();
+            }
+            else
+            {
+                Console.Write("\n\tEnter your desired password: ");
+                string passIn = Console.ReadLine();
+
+                Console.WriteLine($"\n\tUsername: {userIn} \n\tPassword: {passIn}");
+
+                DisplayContinuePrompt();
+
+                loginIn[0] = userIn;
+                loginIn[1] = passIn;
+                loginInCSV[0] = $"{userIn}, {passIn}";
+
+                File.AppendAllLines(dataPathNormal, loginIn);
+                File.AppendAllLines(dataPathCSV, loginInCSV);
+
+                enteredAccounts++;
+            }
+
+
+            // Once username is valid, enter password
+            // Enter username and password as a pair (one line)
+
+            // In this case, switch to just CSV file to intrinsically link username and password. This will retain multi-line functionality and streamline
+        }
+
+        //// Declare loginArr as string[] with length of 2
+        //string[] loginArr = new string[2];
+
+        //// Prompt user for login info to check
+        //Console.Write("\n\tEnter your username: ");
+        //string userIn = Console.ReadLine();
+        //Console.Write("\n\tEnter your password: ");
+        //string passIn = Console.ReadLine();
+
+        //// Set loginArr values to userIn and passIn
+        //loginArr[0] = userIn;
+        //loginArr[1] = passIn;
+
+        //// Repeat entered values to user
+        //Console.WriteLine($"\n\tEntered info: \n\tUsername: {userIn} \n\tPassword: {passIn}");
+
+        //// Write login info to both files
+        //File.WriteAllText(dataPathCSV, $"{userIn},{passIn}");
+        //File.WriteAllLines(dataPathNormal, loginArr);
+
+        Console.WriteLine($"\n\t{accountLimit} accounts added");
 
         DisplayContinuePrompt();
     }
