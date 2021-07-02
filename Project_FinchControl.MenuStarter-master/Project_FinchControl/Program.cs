@@ -4,7 +4,7 @@
 // Description: An application that controls the Finch Robot's LED lights, speakers, and motors
 // Author: Steven Winkler
 // Date Created: 6/5/2021
-// Last Modified: 6/30/2021
+// Last Modified: 7/1/2021
 // ************************************
 
 using System;
@@ -1246,27 +1246,33 @@ class Program
 
     static void LoginMenu()
     {
+        // Declare dataPathNormal and dataPathCSV to link to Login.txt and LoginCSV.txt respectively
         string dataPathNormal = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\Login.txt";
         string dataPathCSV = @"C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\Project_FinchControl.MenuStarter-master\Project_FinchControl\Data\LoginCSV.txt";
         Console.Write("\n\tReturning user? Y or N: ");
         string verify = Console.ReadLine();
 
+        // Ask if user is new, if so, prompt to create accounts
         switch (verify.ToUpper())
         {
             case "Y":
+                // Prompt login if user is returning
                 LoginEntry(dataPathNormal);
                 break;
 
             case "N":
+                // Prompt account creation if user is new, up to 5 in one instance
                 Console.Write("\n\tHow many accounts would you like to create? Max limit of 5: ");
                 Int32.TryParse(Console.ReadLine(), out int accountLimit);
 
+                // Ensure user-input value is within the limit of 5
                 while (accountLimit > 5 || accountLimit < 1)
                 {
                     Console.Write("\n\tPlease enter a positive value less than 5: ");
                     Int32.TryParse(Console.ReadLine(), out accountLimit);
                 }
 
+                // Call LoginWriteInfo to create accounts then LoginEntry to log in
                 LoginWriteInfo(dataPathNormal, dataPathCSV, accountLimit);
                 LoginEntry(dataPathNormal);
                 break;
