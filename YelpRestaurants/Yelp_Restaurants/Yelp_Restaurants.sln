@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yelp_Restaurants", "Yelp_Restaurants\Yelp_Restaurants.csproj", "{C439385D-3CC5-4090-9370-27AE327215D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C439385D-3CC5-4090-9370-27AE327215D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C439385D-3CC5-4090-9370-27AE327215D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C439385D-3CC5-4090-9370-27AE327215D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C439385D-3CC5-4090-9370-27AE327215D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {906543DB-A6CB-4EF4-85C0-3B375E4B1F93}
+	EndGlobalSection
+EndGlobal

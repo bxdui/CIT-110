@@ -1,0 +1,17 @@
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.exe
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.deps.json
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.runtimeconfig.json
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.runtimeconfig.dev.json
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.dll
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Yelp_Restaurants.pdb
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.csprojAssemblyReference.cache
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.AssemblyInfoInputs.cache
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.AssemblyInfo.cs
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.csproj.CoreCompileInputs.cache
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.csproj.CopyComplete
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.dll
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.pdb
+C:\Users\Steven\Desktop\NMC\Summer 2021\CIT 110\YelpRestaurants\Yelp_Restaurants\Yelp_Restaurants\obj\Debug\netcoreapp3.1\Yelp_Restaurants.genruntimeconfig.cache
