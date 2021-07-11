@@ -1,7 +1,7 @@
 ﻿// ************************************
 // Title: Yelp Retriever
 // Application Type: Console
-// Description: Use the Yelp Fusion API to retrieve businesses based off of user input parameters
+// Description: Use the Yelp Fusion API to retrieve businesses based off of user input parameters.
 // Author: Steven Winkler
 // Date Created: 7/6/2021
 // Last Modified: 7/11/2021
