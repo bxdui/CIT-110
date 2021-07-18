@@ -107,43 +107,13 @@ class YelpRetriever
     }
 
     // Return async
-    static async Task<string> YelpGet(string url)
-    {
-        // Ask user input for number of businesses to return, pass as limit parameter
-
-        // Decalre URL to use
-        // string url = "http://webcode.me";
-        string content = null;
-
-        // string data = RetrieveCallInfo(url);
-
-        Console.WriteLine("Collecting...");
-
-        HttpClient client = new HttpClient();
-        var response = await client.GetAsync(url);
-
-        if (response.IsSuccessStatusCode)
-        {
-            content = await client.GetStringAsync(url);
-        }
-        else
-        {
-            Console.WriteLine("No good");
-        }
-        
-        Console.ReadKey();
-
-        return content;
-
-        // Also display results. Format as table that displays name, address, phone number, and website
-    }
 
     static async Task<string> GetAsync(string url)
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
         // request.Headers.Add("Cache-Control", "no-cache");
-        request.Headers.Add("Authorization: Bearer u5LFSqlDy7ltunZKTr3a-U2E9Y3cZiQRrBvWGDaqIaXP73_EbN4Bfu028ki2Pg-ILogFfrqvAyx8RHhfe6PIMSCHUozDgc7PLhvv9sIlKaYivTxWzgNl_nGL-__xYHYx");
+        request.Headers.Add("Authorization: Bearer <API_KEY>");
 
         Console.WriteLine("Collecting...");
 
@@ -155,37 +125,7 @@ class YelpRetriever
         }
     }
 
-    static string RetrieveCallInfo(string url)
-    {
-        // Declare request as var. WebRequest.Create() method makes a request
-        WebRequest request = WebRequest.Create(url + "traverse city");
-
-        // Set request.Method to "GET" (Seemingly not necessary due to use of GetResponse() and GetResponseStream methods inherently retrieving from call)
-        request.Method = "GET";
-
-        //NameValueCollection coll = request.Headers;
-
-        //coll
-
-        // Declare webResponse as var which stores results from request.GetResponse() method. Stores WebResponse type that contains a response to an internet request
-        WebResponse webResponse = request.GetResponse();
-
-        // Declare webStream to return the data stream from the internet request
-        Stream webStream = webResponse.GetResponseStream();
-
-        // Declare reader as SteamReader object which takes in webStream
-        StreamReader reader = new StreamReader(webStream);
-
-        // Declare data as string to store the read webStream variable
-        string data = reader.ReadToEnd();
-
-        reader.Close();
-
-        Console.WriteLine(data);
-
-        return data;
-    }
-
+   
     static void Main()
     {
         Console.ReadKey();
